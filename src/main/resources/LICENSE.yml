@@ -7,34 +7,6 @@ zh_cn:
     - "§6源代码: §9§nhttps://github.com/AzSuawa/AzSuPlugin"
     - "§6许可证: §2Mozilla Public License 2.0"
     - "§6本插件基于MPL 2.0发布。使用、修改或分发需遵守其条款。"
-en_us:
-  info:
-    - "§6========= §eAzSuPlugin §6========="
-    - "§6Developer: §aAzSuawa"
-    - "§6Source Code: §9§nhttps://github.com/AzSuawa/AzSuPlugin"
-    - "§6License: §2Mozilla Public License 2.0"
-    - "§6This plugin is released under MPL 2.0. Use, modification, or distribution must comply with its terms."
-ko_kr:
-  info:
-    - "§6========= §eAzSuPlugin §6========="
-    - "§6개발자: §aAzSuawa"
-    - "§6소스 코드: §9§nhttps://github.com/AzSuawa/AzSuPlugin"
-    - "§6라이선스: §2Mozilla Public License 2.0"
-    - "§6이 플러그인은 MPL 2.0으로 출시되었습니다. 사용, 수정 또는 배포는 해당 조건을 준수해야 합니다."
-lzh:
-  info:
-    - "§6========= §eAzSuPlugin §6========="
-    - "§6製者: §aAzSuawa"
-    - "§6源碼: §9§nhttps://github.com/AzSuawa/AzSuPlugin"
-    - "§6文憑: §2Mozilla Public License 2.0"
-    - "§6此插件依MPL 2.0而發。用、改、傳皆須遵其條款。"
-ru_ru:
-  info:
-    - "§6========= §eAzSuPlugin §6========="
-    - "§6Разработчик: §aAzSuawa"
-    - "§6Исходный код: §9§nhttps://github.com/AzSuawa/AzSuPlugin"
-    - "§6Лицензия: §2Mozilla Public License 2.0"
-    - "§6Этот плагин выпущен под MPL 2.0. Использование, изменение или распространение должно соответствовать его условиям."
 zh_tw:
   info:
     - "§6========= §eAzSuPlugin §6========="
@@ -42,3 +14,31 @@ zh_tw:
     - "§6原始碼: §9§nhttps://github.com/AzSuawa/AzSuPlugin"
     - "§6授權: §2Mozilla Public License 2.0"
     - "§6本插件基於MPL 2.0發布。使用、修改或散佈需遵守其條款。"
+lzh:
+  info:
+    - "§6========= §eAzSuPlugin §6========="
+    - "§6製者: §aAzSuawa"
+    - "§6源碼: §9§nhttps://github.com/AzSuawa/AzSuPlugin"
+    - "§6文憑: §2Mozilla Public License 2.0"
+    - "§6此插件依MPL 2.0而發。用、改、傳皆須遵其條款。"
+en_us:
+  info:
+    - "§6========= §eAzSuPlugin §6========="
+    - "§6Developer: §aAzSuawa"
+    - "§6Source Code: §9§nhttps://github.com/AzSuawa/AzSuPlugin"
+    - "§6License: §2Mozilla Public License 2.0"
+    - "§6This plugin is released under MPL 2.0. Use, modification, or distribution must comply with its terms."
+ru_ru:
+  info:
+    - "§6========= §eAzSuPlugin §6========="
+    - "§6Разработчик: §aAzSuawa"
+    - "§6Исходный код: §9§nhttps://github.com/AzSuawa/AzSuPlugin"
+    - "§6Лицензия: §2Mozilla Public License 2.0"
+    - "§6Этот плагин выпущен под MPL 2.0. Использование, изменение или распространение должно соответствовать его условиям."
+ko_kr:
+  info:
+    - "§6========= §eAzSuPlugin §6========="
+    - "§6개발자: §aAzSuawa"
+    - "§6소스 코드: §9§nhttps://github.com/AzSuawa/AzSuPlugin"
+    - "§6라이선스: §2Mozilla Public License 2.0"
+    - "§6이 플러그인은 MPL 2.0으로 출시되었습니다. 사용, 수정 또는 배포는 해당 조건을 준수해야 합니다."
