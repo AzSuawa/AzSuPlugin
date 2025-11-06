@@ -1,0 +1,14 @@
+# 繁體中文 (zh_tw)
+config-version: 1
+no-permission: "§c你沒有權限使用此指令！"
+reload-success: "§a設定重新載入成功！"
+reload-fail: "§c設定重新載入失敗，請檢查控制台日誌"
+xcmd-disabled: "§c跨服指令功能未啟用"
+server-not-allowed: "§c不允許轉發到伺服器: {server}"
+command-not-allowed: "§c不允許執行指令: {command}"
+command-sent: "§a指令已發送到伺服器: {server}"
+command-failed: "§c指令發送失敗"
+no-proxy-permission: "§c你沒有子服轉代理權限！"
+no-server-permission: "§c你沒有子服轉子服權限！"
+no-console-permission: "§c你沒有控制台指令權限！"
+no-all-permission: "§c你沒有所有伺服器轉發權限！"

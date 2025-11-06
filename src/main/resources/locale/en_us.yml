@@ -1,0 +1,14 @@
+# English (en_us)
+config-version: 1
+no-permission: "§cYou don't have permission to use this command!"
+reload-success: "§aConfiguration reloaded successfully!"
+reload-fail: "§cConfiguration reload failed, please check console logs"
+xcmd-disabled: "§cCross-server command feature is disabled"
+server-not-allowed: "§cNot allowed to forward to server: {server}"
+command-not-allowed: "§cNot allowed to execute command: {command}"
+command-sent: "§aCommand sent to server: {server}"
+command-failed: "§cCommand sending failed"
+no-proxy-permission: "§cYou don't have proxy forwarding permission!"
+no-server-permission: "§cYou don't have server-to-server permission!"
+no-console-permission: "§cYou don't have console command permission!"
+no-all-permission: "§cYou don't have all servers forwarding permission!"

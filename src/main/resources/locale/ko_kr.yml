@@ -1,0 +1,14 @@
+# 한국어 (ko_kr)
+config-version: 1
+no-permission: "§c이 명령어를 사용할 권한이 없습니다！"
+reload-success: "§a설정 재로드 성공！"
+reload-fail: "§c설정 재로드 실패, 콘솔 로그를 확인해주세요"
+xcmd-disabled: "§c크로스 서버 명령어 기능이 비활성화되었습니다"
+server-not-allowed: "§c{server} 서버로의 전송이 허용되지 않습니다"
+command-not-allowed: "§c{command} 명령어 실행이 허용되지 않습니다"
+command-sent: "§a{server} 서버로 명령어를 전송했습니다"
+command-failed: "§c명령어 전송 실패"
+no-proxy-permission: "§c서브 서버에서 프록시로 전송할 권한이 없습니다！"
+no-server-permission: "§c서브 서버 간 전송 권한이 없습니다！"
+no-console-permission: "§c콘솔 명령어 권한이 없습니다！"
+no-all-permission: "§c모든 서버 전송 권한이 없습니다！"

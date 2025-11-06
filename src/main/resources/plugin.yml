@@ -1,0 +1,58 @@
+name: AzSu
+version: 1.0.0
+main: top.azsu.AzSuPlugin
+api-version: "1.21"
+author: azsu
+website: azsu.top
+description: AzSu跨服命令转发插件
+
+commands:
+  azsu:
+    description: AzSu插件主命令
+    usage: /<command> [reload|info]
+    permission: azsu.command.azsu
+  xcmd:
+    description: 跨服命令执行
+    usage: /xcmd <服务器> <命令>
+    permission: azsu.xcmd.proxy
+
+permissions:
+  azsu.*:
+    description: AzSu插件所有权限
+    default: op
+    children:
+      azsu.admin: true
+      azsu.command.azsu: true
+      azsu.xcmd.proxy: true
+      azsu.xcmd.server: true
+      azsu.xcmd.console: true
+      azsu.xcmd.all: true
+      azsu.info: true
+  
+  azsu.admin:
+    description: AzSu插件管理员权限
+    default: op
+  
+  azsu.command.azsu:
+    description: 使用/azsu命令权限
+    default: true
+  
+  azsu.info:
+    description: 查看插件信息权限
+    default: true
+  
+  azsu.xcmd.proxy:
+    description: 子服转代理端命令权限（玩家身份）
+    default: true
+  
+  azsu.xcmd.server:
+    description: 子服转子服命令权限（玩家身份）
+    default: op
+  
+  azsu.xcmd.console:
+    description: 以控制台身份执行命令权限
+    default: op
+  
+  azsu.xcmd.all:
+    description: 使用all向所有服务器转发命令权限
+    default: op

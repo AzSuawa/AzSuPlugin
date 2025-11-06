@@ -1,0 +1,65 @@
+# Copyright (c) 2025 AzSuawa. All rights reserved. 
+# 版权所有 (c) 2025 AzSuawa 保留所有权利.
+# Licensed under MPL 2.0. See: http://mozilla.org/MPL/2.0/
+# 基于Mozilla公共许可证2.0版开源。许可证: http://mozilla.org/MPL/2.0/
+# Project/项目: https://github.com/AzSuawa/AzSuPlugin
+
+# 配置文件版本号
+# 若此配置与插件版本不匹配，将重新加载默认配置并迁移原文件至backup文件夹
+# 如果你不知道这是什么，请不要修改
+config-version: 1
+
+# 语言设置，支持的语言：
+# zh_cn: 简体中文 (Simplified Chinese)
+# zh_tw: 繁體中文 (Traditional Chinese)
+# lzh: 文言 (Classical Chinese)
+# en_us: English (United States)
+# ru_ru: Русский (Russian)
+# ko_kr: 한국어 (Korean)
+locale: "zh_cn"
+
+# 功能开关
+features:
+  # 跨服命令转发（需要在代理端安装AzSuVelocity）
+  xcmd-forward: true
+  # 跨服调用占位符（暂不支持）
+  papi-cross-server: false
+
+# 跨服命令转发配置
+xcmd:
+  # 命令过滤模式: whitelist(白名单) 或 blacklist(黑名单)
+  filter-mode: "blacklist"
+  
+  # 命令列表（根据filter-mode决定是白名单还是黑名单）
+  commands:
+    - "op"
+    - "deop"
+    - "stop"
+    - "reload"
+    - "plugman"
+    - "ban"
+    - "kick"
+  
+  # 以控制台身份执行的命令
+  console-commands:
+    - "btab"
+  
+  # 允许转发到的服务器列表
+  # proxy是代理端
+  # all是所有服务器
+  allowed-servers:
+    - "lobby"
+    - "lobby2"
+    - "lobby3"
+    - "proxy"
+    - "all"
+  
+  # 子服转子服执行模式: console(控制台) 或 player(不支持)
+  server-to-server-mode: "console"
+
+  # 权限说明
+  # azsu.admin: 管理员权限
+  # azsu.xcmd.proxy: 以玩家身份将命令从子服转发至代理权限（默认所有玩家拥有）
+  # azsu.xcmd.server: 以玩家身份将命令从子服转发至其他子服权限
+  # azsu.xcmd.console: 以控制台身份转发命令权限
+  # azsu.xcmd.all: 转发命令至所有服务器权限

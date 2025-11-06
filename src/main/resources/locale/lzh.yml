@@ -1,0 +1,14 @@
+# 文言 (lzh)
+config-version: 1
+no-permission: "§c汝無權行此令，請諒之"
+reload-success: "§a配置重載已成，諸事順遂"
+reload-fail: "§c配置重載未竟，請察控制台錄事"
+xcmd-disabled: "§c跨服令典未啟，暫不可用"
+server-not-allowed: "§c不可轉至{server}伺服器"
+command-not-allowed: "§c不可施行{command}之令"
+command-sent: "§a令已達{server}伺服器"
+command-failed: "§c令發未成，途中受阻"
+no-proxy-permission: "§c汝無子服轉代理之權限"
+no-server-permission: "§c汝無子服互轉之權柄"
+no-console-permission: "§c汝無控制台施令之特權"
+no-all-permission: "§c汝無通轉諸服之全權"
