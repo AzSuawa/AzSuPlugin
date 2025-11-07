@@ -37,6 +37,7 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
     private FileConfiguration licenseConfig;
     private FileConfiguration localeConfig;
     private final int CURRENT_CONFIG_VERSION = 1;
+    private final int CURRENT_LOCALE_VERSION = 1;
     
     // 通信通道
     private static final String AZSU_CHANNEL = "azsu:main";
@@ -154,15 +155,10 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
                 getLogger().info("以控制台身份执行命令: " + command);
             } else {
                 // 对于玩家命令，尝试查找玩家
+                // 注意：这里需要在当前服务器上查找玩家
                 Player player = Bukkit.getPlayer(executorUUID);
-                if (player != null && player.isOnline()) {
-                    executor = player;
-                    getLogger().info("以玩家身份执行命令: " + command + " (玩家: " + executorName + ")");
-                } else {
-                    // 如果玩家不在线，回退到控制台执行
-                    executor = Bukkit.getConsoleSender();
-                    getLogger().warning("玩家 " + executorName + " 不在线，以控制台身份执行命令: " + command);
-                }
+                executor = player;
+                getLogger().info("以玩家身份执行命令: " + command + " (玩家: " + executorName + ")");
             }
             
             // 执行命令
@@ -186,8 +182,6 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
                 return handleAzSuCommand(sender, args);
             case "xcmd":
                 return handleXcmdCommand(sender, args);
-            case "testreceive":
-                return handleTestReceiveCommand(sender);
             default:
                 return false;
         }
@@ -216,10 +210,8 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
                     completions.addAll(getAllowedServers());
                 } else if (args.length == 2) {
                     // 命令补全提示
-                    completions.add("say");
-                    completions.add("gamemode");
-                    completions.add("tp");
-                    completions.add("give");
+                    completions.add("broadcast");
+                    completions.add("w");
                 }
                 break;
         }
@@ -272,20 +264,19 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
      */
     private void sendAzSuHelp(CommandSender sender) {
         sender.sendMessage("§6AzSuPlugin v" + getDescription().getVersion());
-        sender.sendMessage("§e/azsu help §7- 显示此帮助信息");
+        sender.sendMessage("§e/azsu help" + getMessage("help-help"));
         
         if (sender.hasPermission("azsu.admin")) {
-            sender.sendMessage("§e/azsu reload §7- 重载插件配置");
+            sender.sendMessage("§e/azsu reload" + getMessage("help-reload"));
         }
         
         if (sender.hasPermission("azsu.info")) {
-            sender.sendMessage("§e/azsu info §7- 显示插件信息");
+            sender.sendMessage("§e/azsu info" + getMessage("help-info"));
         }
         
         if (sender.hasPermission("azsu.xcmd.proxy")) {
-            sender.sendMessage("§e/xcmd <服务器> <命令> §7- 跨服执行命令");
+            sender.sendMessage("§e/xcmd <server> <command>" + getMessage("help-xcmd"));
         }
-         
     }
 
     /**
@@ -306,8 +297,8 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
 
         // 参数检查
         if (args.length < 2) {
-            sender.sendMessage("§c用法: /xcmd <服务器> <命令>");
-            sender.sendMessage("§6可用服务器: " + String.join(", ", getAllowedServers()));
+            sender.sendMessage(getMessage("xcmd-usage"));
+            sender.sendMessage(getMessage("xcmd-servers").replace("{servers}", String.join(", ", getAllowedServers())));
             return true;
         }
 
@@ -388,27 +379,22 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
     }
 
     /**
-     * 处理测试接收命令
-     */
-    private boolean handleTestReceiveCommand(CommandSender sender) {
-        sender.sendMessage("§6AzSu插件状态检查 v" + getDescription().getVersion());
-        sender.sendMessage("§7- 配置版本: " + CURRENT_CONFIG_VERSION);
-        sender.sendMessage("§7- 注册的通道: " + AZSU_CHANNEL);
-        sender.sendMessage("§7- 消息监听器: " + (this instanceof PluginMessageListener ? "已注册" : "未注册"));
-        sender.sendMessage("§a权限检查:");
-        sender.sendMessage("§7- azsu.xcmd.proxy: " + (sender.hasPermission("azsu.xcmd.proxy") ? "§a有" : "§c无"));
-        sender.sendMessage("§7- azsu.xcmd.server: " + (sender.hasPermission("azsu.xcmd.server") ? "§a有" : "§c无"));
-        sender.sendMessage("§7- azsu.xcmd.console: " + (sender.hasPermission("azsu.xcmd.console") ? "§a有" : "§c无"));
-        sender.sendMessage("§7- azsu.xcmd.all: " + (sender.hasPermission("azsu.xcmd.all") ? "§a有" : "§c无"));
-        return true;
-    }
-
-    /**
      * 加载配置文件
      */
     private boolean loadConfig() {
         try {
-            // 检查配置文件版本
+            // 确保数据目录存在
+            if (!getDataFolder().exists()) {
+                getDataFolder().mkdirs();
+            }
+
+            // 备份目录
+            File backupDir = new File(getDataFolder(), "backup");
+            if (!backupDir.exists()) {
+                backupDir.mkdirs();
+            }
+
+            // 1. 处理主配置文件
             File configFile = new File(getDataFolder(), "config.yml");
             if (configFile.exists()) {
                 YamlConfiguration existingConfig = YamlConfiguration.loadConfiguration(configFile);
@@ -416,15 +402,11 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
                 
                 if (existingVersion != CURRENT_CONFIG_VERSION) {
                     // 备份旧配置
-                    File backupDir = new File(getDataFolder(), "backup");
-                    if (!backupDir.exists()) {
-                        backupDir.mkdirs();
-                    }
                     File backupFile = new File(backupDir, "config-v" + existingVersion + "-" + System.currentTimeMillis() + ".yml");
                     Files.copy(configFile.toPath(), backupFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     getLogger().info("已备份旧配置文件: " + backupFile.getName());
                     
-                    // 删除旧配置，让saveDefaultConfig生成新配置
+                    // 删除旧配置，重新生成
                     configFile.delete();
                 }
             }
@@ -436,15 +418,35 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
             reloadConfig();
             config = getConfig();
 
-            // 强制覆盖LICENSE.yml（每次重载都使用resources中的版本）
+            // 2. 强制覆盖LICENSE.yml（每次重载都使用resources中的版本）
             File licenseFile = new File(getDataFolder(), "LICENSE.yml");
             if (licenseFile.exists()) {
-                licenseFile.delete(); // 删除旧文件
+                licenseFile.delete();
             }
-            saveResource("LICENSE.yml", false); // 从resources复制
+            saveResource("LICENSE.yml", false);
             licenseConfig = YamlConfiguration.loadConfiguration(licenseFile);
 
-            // 加载语言文件
+            // 3. 加载其他资源文件（不覆盖已存在的）
+            String[] resourceFiles = {
+                "config.yml",
+                "LICENSE.yml",
+                "locale/zh_cn.yml",
+                "locale/zh_tw.yml",
+                "locale/lzh.yml",
+                "locale/en_us.yml",
+                "locale/ru_ru.yml",
+                "locale/ko_kr.yml"
+            };
+            
+            for (String fileName : resourceFiles) {
+                File file = new File(getDataFolder(), fileName);
+                if (!file.exists()) {
+                    saveResource(fileName, false);
+                    getLogger().info("已创建默认文件: " + fileName);
+                }
+            }
+
+            // 4. 加载语言文件（特殊处理版本检查）
             loadLocaleConfig();
 
             getLogger().info("配置文件加载成功！版本: " + CURRENT_CONFIG_VERSION);
@@ -463,26 +465,48 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
         try {
             String locale = config.getString("locale", "zh_cn");
             File localeFile = new File(getDataFolder(), "locale/" + locale + ".yml");
+            File localeDir = new File(getDataFolder(), "locale");
             
-            if (!localeFile.exists()) {
-                // 如果指定语言文件不存在，尝试从jar中提取
-                saveResource("locale/" + locale + ".yml", false);
+            // 确保locale目录存在
+            if (!localeDir.exists()) {
+                localeDir.mkdirs();
             }
+            
+            // 备份目录
+            File backupDir = new File(getDataFolder(), "backup");
+            if (!backupDir.exists()) {
+                backupDir.mkdirs();
+            }
+            
+            boolean needReload = false;
             
             if (localeFile.exists()) {
-                localeConfig = YamlConfiguration.loadConfiguration(localeFile);
+                YamlConfiguration existingLocale = YamlConfiguration.loadConfiguration(localeFile);
+                int existingVersion = existingLocale.getInt("config-version", -1);
                 
-                // 检查语言文件版本
-                int localeVersion = localeConfig.getInt("config-version", -1);
-                if (localeVersion < 1) {
-                    getLogger().warning("语言文件版本过时: " + localeFile.getPath());
+                if (existingVersion != CURRENT_LOCALE_VERSION) {
+                    // 备份旧语言文件
+                    File backupFile = new File(backupDir, "locale-" + locale + "-v" + existingVersion + "-" + System.currentTimeMillis() + ".yml");
+                    Files.copy(localeFile.toPath(), backupFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    getLogger().info("已备份旧语言文件: " + backupFile.getName());
+                    
+                    // 删除旧文件
+                    localeFile.delete();
+                    needReload = true;
                 }
-                
-                getLogger().info("已加载语言文件: " + locale);
             } else {
-                getLogger().warning("语言文件不存在: " + localeFile.getPath() + "，使用默认消息");
-                localeConfig = new YamlConfiguration();
+                needReload = true;
             }
+            
+            // 如果文件不存在或版本不匹配，重新保存
+            if (needReload || !localeFile.exists()) {
+                saveResource("locale/" + locale + ".yml", false);
+                getLogger().info("已加载语言文件: " + locale);
+            }
+            
+            // 加载语言配置
+            localeConfig = YamlConfiguration.loadConfiguration(localeFile);
+                
         } catch (Exception e) {
             getLogger().warning("加载语言文件失败: " + e.getMessage());
             localeConfig = new YamlConfiguration();
@@ -579,7 +603,7 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
                     String serverToServerMode = config.getString("xcmd.server-to-server-mode", "console");
                     if ("player".equalsIgnoreCase(serverToServerMode)) {
                         // player模式：使用玩家身份
-                        isConsole = false;
+                        isConsole = false;  // 关键修复：使用玩家身份
                     } else {
                         // console模式：使用控制台身份
                         isConsole = true;
@@ -613,12 +637,7 @@ public class AzSuPlugin extends JavaPlugin implements PluginMessageListener, Tab
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(bytes);
             
-            // 消息格式：
-            // 1. 目标服务器
-            // 2. 要执行的命令
-            // 3. 执行者名称
-            // 4. 执行者UUID
-            // 5. 是否以控制台身份执行
+            // 目标服务器，要执行的命令，执行者名称，执行者UUID，是否以控制台身份执行
             out.writeUTF(targetServer);
             out.writeUTF(command);
             out.writeUTF(executorName);

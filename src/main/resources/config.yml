@@ -5,8 +5,8 @@
 # Project/项目: https://github.com/AzSuawa/AzSuPlugin
 
 # BiliBili: https://b23.tv/gvc2KSA
-# Discord: https://discord.gg/k9n9Tnkx2
-# QQ群: https://qm.qq.com/q/aJUXO7gPbW
+# Discord: https://discord.gg/WkeYWaSHUB
+# QQ Group: https://qm.qq.com/q/aJUXO7gPbW
 
 # 配置文件版本号
 # 若此配置与插件版本不匹配，将重新加载默认配置并迁移原文件至backup文件夹
@@ -20,7 +20,7 @@ config-version: 1
 # en_us: English (United States)
 # ru_ru: Русский (Russian)
 # ko_kr: 한국어 (Korean)
-locale: "zh_cn"
+locale: "lzh"
 
 # 功能开关
 features:
